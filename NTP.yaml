@@ -1,0 +1,14 @@
+---
+- hosts: servers
+
+  tasks:
+    - name: Establecer configuracion NTP
+      ansible.builtin.shell: |
+            killall apt
+            rm -f /var/lib/dpkg/lock*
+            apt install ntpsec -y
+            timedatectl set-timezone America/Caracas
+            sed -i 's/pool/#pool/1' /etc/ntpsec/ntp.conf
+            sed -i 's/server/#server/1' /etc/ntpsec/ntp.conf
+            echo "server "IP" iburst" >> /etc/ntpsec/ntp.conf
+            systemctl restart ntpsec
